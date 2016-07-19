@@ -1,5 +1,4 @@
 'use strict'
-import 'crypto'
 
 // (quantity)d(sides) + (bonus) = (result)
 const init = {
@@ -10,11 +9,11 @@ const init = {
 }
 
 function roll(state) {
-  let sum = state.bonus
+  let sum = state.bonus | 0
   for (let i = 0; i < state.quantity; ++i) {
     sum += (Math.random() * state.sides + 1.0) | 0
   }
-  return sum
+  return sum + ''
 }
 
 function roller (state = init, action = {}) {
@@ -24,5 +23,12 @@ function roller (state = init, action = {}) {
         ...state,
         result: roll(state)
       }
+    case 'update':
+      state[action.key] = action.value
+      return state
+    default:
+      return state
   }
 }
+
+export { roller, init }
